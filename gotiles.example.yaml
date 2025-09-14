@@ -1,0 +1,21 @@
+sources:
+  - name: name1
+    db_host: ''
+    username: ''
+    password: ''
+    db_name: ''
+    tiles:
+      name_1:
+        query: ''
+      name_2:
+        query: ''
+  - name: name2
+    db_host: ''
+    username: ''
+    password: ''
+    db_name: ''
+    tiles:
+      name_1:
+        query: ''
+      name_2:
+        query: ''
