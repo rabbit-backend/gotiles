@@ -22,6 +22,8 @@ func main() {
 	e := echo.New()
 	e.Use(middleware.CORS())
 
+	e.Static("/static", path.Join("tiles", "static"))
+
 	e.GET("/tiles/:source/:tile/:x/:y/:z", func(c echo.Context) error {
 		x := c.Param("x")
 		y := c.Param("y")
@@ -51,6 +53,8 @@ func main() {
 
 		return c.Blob(http.StatusOK, "application/x-protobuf", data)
 	})
+
+	e.Use(middleware.Gzip())
 
 	e.Logger.Fatal(e.Start(":3003"))
 }
