@@ -1,9 +1,7 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
-	"log"
 	"net/http"
 	"path"
 
@@ -11,36 +9,46 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/rabbit-backend/go-tiles/core"
-	"github.com/rabbit-backend/go-tiles/db"
 )
 
-var DB *sql.DB
-
 func init() {
-	var err error
-
 	godotenv.Load()
-	// Connect to the Postgres Database
-	if DB, err = db.ConnectDB(); err != nil {
-		log.Fatalln("[x] error connecting db:", err)
-	}
 }
 
 func main() {
+	config := core.GetConfig()
+	connections := config.GetConnections()
+
 	e := echo.New()
 	e.Use(middleware.CORS())
 
-	e.GET("/tiles/:tile/:x/:y/:z", func(c echo.Context) error {
+	e.GET("/tiles/:source/:tile/:x/:y/:z", func(c echo.Context) error {
 		x := c.Param("x")
 		y := c.Param("y")
 		z := c.Param("z")
 		tileName := c.Param("tile")
+		source := c.Param("source")
 
-		query, _ := core.GetQuery(path.Join("tiles", "db", fmt.Sprintf("%s.sql", tileName)))
+		db := connections[source]
+		query, err := core.GetQuery(path.Join(
+				"tiles", 
+				"db", 
+				source, 
+				fmt.Sprintf("%s.sql", tileName),
+			),
+		)
+
+		if err != nil {
+			return c.Blob(http.StatusInternalServerError, "application/x-protobuf", []byte(""))
+		}
 		
 		var data []byte
-		DB.QueryRow(query, x, y, z).Scan(&data)
-	
+		
+		err = db.QueryRow(query, x, y, z).Scan(&data)
+		if err != nil {
+			return c.Blob(http.StatusInternalServerError, "application/x-protobuf", []byte(""))
+		}
+
 		return c.Blob(http.StatusOK, "application/x-protobuf", data)
 	})
 

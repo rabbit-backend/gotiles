@@ -1,0 +1,18 @@
+{
+  "sources": [
+    {
+      "name": "db_a",
+      "connection": {
+        "type": "env",
+        "value": "POSTGRES_URL"
+      }
+    },
+    {
+      "name": "db_b",
+      "connection": {
+        "type": "env",
+        "value": "POSTGRES_URL"
+      }
+    }
+  ]
+}
