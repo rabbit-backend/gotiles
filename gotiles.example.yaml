@@ -1,21 +1,20 @@
 sources:
-  - name: name1
-    db_host: ''
-    username: ''
-    password: ''
-    db_name: ''
+  - name: source_name
+    connection: "postgresql://username:password@localhost:5432/dbname?sslmode=disable"
     tiles:
-      name_1:
-        query: ''
+      buildings:
+        query: |
+          SELECT ST_AsMVT(tile, 'buildings', 4096, 'geom') FROM (
+            SELECT 
+                ST_AsMVTGeom(
+                    ST_Transform(ST_CurveToLine(geom), 3857),
+                    ST_TileEnvelope($3, $1, $2),
+                    4096, 64, true
+                ) as geom
+            FROM "public"."buildings"
+            WHERE geom && ST_Transform(ST_TileEnvelope($3, $1, $2), 4326)
+          ) as tile WHERE geom IS NOT NULL;
+        min_zoom: 13
+        max_zoom: 24
       name_2:
-        query: ''
-  - name: name2
-    db_host: ''
-    username: ''
-    password: ''
-    db_name: ''
-    tiles:
-      name_1:
-        query: ''
-      name_2:
-        query: ''
+        query: ""
