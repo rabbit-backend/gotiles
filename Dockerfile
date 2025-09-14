@@ -12,7 +12,7 @@ RUN go mod download
 COPY . .
 
 # Build
-RUN CGO_ENABLED=0 GOOS=linux go build -o /gotiles
+RUN CGO_ENABLED=0 GOOS=linux go build -o ./gotiles
 
 # Optional:
 # To bind to a TCP port, runtime parameters must be supplied to the docker command.
@@ -22,4 +22,4 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o /gotiles
 EXPOSE 3003
 
 # Run
-CMD ["/gotiles"]
+CMD ["./gotiles"]
