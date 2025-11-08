@@ -3,12 +3,14 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"path"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/rabbit-backend/go-tiles/core"
+	engine "github.com/rabbit-backend/template"
 )
 
 func init() {
@@ -18,6 +20,11 @@ func init() {
 func main() {
 	config := core.GetConfig()
 	connections := config.GetConnections()
+	sqlEngine := engine.NewEngineWithPlaceHolder(engine.NewPostgresPlaceHolder())
+
+	if os.Getenv("GOTILES_DEBUG") == "true" {
+		sqlEngine.SetCache(false) // disable template caching <-- only in debug mode
+	}
 
 	e := echo.New()
 	e.Use(middleware.CORS())
@@ -32,21 +39,23 @@ func main() {
 		source := c.Param("source")
 
 		db := connections[source]
-		query, err := core.GetQuery(path.Join(
-				"tiles", 
-				"db", 
-				source, 
-				fmt.Sprintf("%s.sql", tileName),
-			),
-		)
 
-		if err != nil {
-			return c.Blob(http.StatusInternalServerError, "application/x-protobuf", []byte(""))
+		params := map[string]any{
+			"_x": x,
+			"_y": y,
+			"_z": z,
 		}
-		
+
+		for key, value := range c.QueryParams() {
+			params[key] = value[0]
+		}
+
+		tileQueryPath := path.Join("tiles", "db", source, fmt.Sprintf("%s.sql", tileName))
+		query, args := core.GetQuery(sqlEngine, tileQueryPath, params)
+
 		var data []byte
-		
-		err = db.QueryRow(query, x, y, z).Scan(&data)
+
+		err := db.QueryRow(query, args...).Scan(&data)
 		if err != nil {
 			return c.Blob(http.StatusInternalServerError, "application/x-protobuf", []byte(""))
 		}

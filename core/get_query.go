@@ -1,8 +1,10 @@
 package core
 
-import "os"
+import (
+	engine "github.com/rabbit-backend/template"
+)
 
-func GetQuery(path string) (string, error) {
-	data, err := os.ReadFile(path)
-	return string(data), err
+func GetQuery(e *engine.Engine, path string, params any) (string, []any) {
+	query, args := e.Execute(path, params)
+	return query, args
 }
