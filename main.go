@@ -51,11 +51,14 @@ func main() {
 		}
 
 		tileQueryPath := path.Join("tiles", "db", source, fmt.Sprintf("%s.sql", tileName))
-		query, args := core.GetQuery(sqlEngine, tileQueryPath, params)
+		query, args, err := core.GetQuery(sqlEngine, tileQueryPath, params)
+		if err != nil {
+			return c.Blob(http.StatusInternalServerError, "application/x-protobuf", []byte(""))
+		}
 
 		var data []byte
 
-		err := db.QueryRow(query, args...).Scan(&data)
+		err = db.QueryRow(query, args...).Scan(&data)
 		if err != nil {
 			return c.Blob(http.StatusInternalServerError, "application/x-protobuf", []byte(""))
 		}
