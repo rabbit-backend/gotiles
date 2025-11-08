@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"path"
 
 	"github.com/joho/godotenv"
@@ -22,10 +21,6 @@ func main() {
 	config := core.GetConfig()
 	connections := config.GetConnections()
 	sqlEngine := engine.NewEngineWithPlaceHolder(engine.NewPostgresPlaceHolder())
-
-	if os.Getenv("GOTILES_DEBUG") == "true" {
-		sqlEngine.SetCache(false) // disable template caching <-- only in debug mode
-	}
 
 	e := echo.New()
 	e.Use(middleware.CORS())
