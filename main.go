@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"path"
@@ -53,6 +54,7 @@ func main() {
 		tileQueryPath := path.Join("tiles", "db", source, fmt.Sprintf("%s.sql", tileName))
 		query, args, err := core.GetQuery(sqlEngine, tileQueryPath, params)
 		if err != nil {
+			log.Println(err)
 			return c.Blob(http.StatusInternalServerError, "application/x-protobuf", []byte(""))
 		}
 
@@ -60,6 +62,7 @@ func main() {
 
 		err = db.QueryRow(query, args...).Scan(&data)
 		if err != nil {
+			log.Println(err)
 			return c.Blob(http.StatusInternalServerError, "application/x-protobuf", []byte(""))
 		}
 
