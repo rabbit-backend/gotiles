@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+	"log"
 
 	_ "github.com/lib/pq"
 )
@@ -13,7 +14,7 @@ type PGSource struct {
 func (s *PGSource) Open(conn string) {
 	db, err := sql.Open("postgres", conn)
 	if err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 
 	s.db = db

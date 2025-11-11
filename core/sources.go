@@ -1,12 +1,12 @@
 package core
 
 import (
-	"database/sql"
 	"encoding/json"
 	"log"
 	"os"
 
 	_ "github.com/lib/pq"
+	"github.com/rabbit-backend/go-tiles/db"
 )
 
 type DBConnection struct {
@@ -24,12 +24,12 @@ type GoTilesConfig struct {
 	Sources []Source `json:"sources"`
 }
 
-func (conn DBConnection) GetConnection() (*sql.DB, error) {
+func (conn DBConnection) GetConnectionURL() string {
 	if conn.Type == "env" {
-		return sql.Open("postgres", os.Getenv(conn.Value))
+		return os.Getenv(conn.Value)
 	}
 
-	return sql.Open("postgres", conn.Value)
+	return conn.Value
 }
 
 func GetConfig() GoTilesConfig {
@@ -46,14 +46,17 @@ func GetConfig() GoTilesConfig {
 	return config
 }
 
-func (config GoTilesConfig) GetConnections() map[string]*sql.DB {
-	connections := make(map[string]*sql.DB, 0)
+func (config GoTilesConfig) GetConnections() map[string]db.DBSource {
+	connections := make(map[string]db.DBSource, 0)
 
 	for _, source := range config.Sources {
-		conn, err := source.Connection.GetConnection()
-		if err != nil {
-			log.Fatalln(err)
+		driver, ok := db.DB_SOURCES[source.Type]
+		if !ok {
+			log.Fatalln("[x] Invalid datasource:", source.Type, " / Try implementing the driver for this type")
 		}
+
+		conn := driver()
+		conn.Open(source.Connection.GetConnectionURL()) // try to connect to the database
 
 		connections[source.Name] = conn
 	}

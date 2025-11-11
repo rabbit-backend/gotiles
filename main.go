@@ -53,9 +53,7 @@ func main() {
 			return c.Blob(http.StatusInternalServerError, "application/x-protobuf", []byte(""))
 		}
 
-		var data []byte
-
-		err = db.QueryRow(query, args...).Scan(&data)
+		data, err := db.Execute(query, args...)
 		if err != nil {
 			log.Println("[x] error:", err)
 			return c.Blob(http.StatusInternalServerError, "application/x-protobuf", []byte(""))
