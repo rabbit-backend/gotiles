@@ -17,6 +17,7 @@ type DBConnection struct {
 type Source struct {
 	Name       string       `json:"name"`
 	Connection DBConnection `json:"connection"`
+	Type       string       `json:"type"`
 }
 
 type GoTilesConfig struct {

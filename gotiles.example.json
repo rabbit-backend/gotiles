@@ -2,6 +2,7 @@
   "sources": [
     {
       "name": "db_a",
+      "type": "postgres",
       "connection": {
         "type": "env",
         "value": "POSTGRES_URL"
@@ -9,9 +10,18 @@
     },
     {
       "name": "db_b",
+      "type": "memsql",
       "connection": {
         "type": "env",
-        "value": "POSTGRES_URL"
+        "value": "MEMSQL_URL"
+      }
+    },
+    {
+      "name": "db_c",
+      "type": "oracle",
+      "connection": {
+        "type": "env",
+        "value": "ORACLE_URL"
       }
     }
   ]
