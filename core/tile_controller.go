@@ -8,10 +8,9 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/rabbit-backend/go-tiles/db"
-	engine "github.com/rabbit-backend/template"
 )
 
-func NewTileController(connections map[string]db.DBSource, e *engine.Engine) func(c echo.Context) error {
+func NewTileController(connections map[string]db.DBSource) func(c echo.Context) error {
 	return func(c echo.Context) error {
 		x := c.Param("x")
 		y := c.Param("y")
@@ -32,13 +31,7 @@ func NewTileController(connections map[string]db.DBSource, e *engine.Engine) fun
 		}
 
 		tileQueryPath := path.Join("tiles", "db", source, fmt.Sprintf("%s.sql", tileName))
-		query, args, err := e.Execute(tileQueryPath, params)
-		if err != nil {
-			log.Println("[x] error:", err)
-			return c.Blob(http.StatusInternalServerError, "application/x-protobuf", []byte(""))
-		}
-
-		data, err := db.Execute(query, args...)
+		data, err := db.Execute(tileQueryPath, params)
 		if err != nil {
 			log.Println("[x] error:", err)
 			return c.Blob(http.StatusInternalServerError, "application/x-protobuf", []byte(""))

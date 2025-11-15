@@ -5,10 +5,12 @@ import (
 	"log"
 
 	_ "github.com/lib/pq"
+	engine "github.com/rabbit-backend/template"
 )
 
 type PGSource struct {
-	db *sql.DB
+	db     *sql.DB
+	engine *engine.Engine
 }
 
 func (s *PGSource) Open(conn string) {
@@ -20,8 +22,14 @@ func (s *PGSource) Open(conn string) {
 	s.db = db
 }
 
-func (s *PGSource) Execute(query string, args ...any) ([]byte, error) {
+func (s *PGSource) Execute(queryPath string, params any) ([]byte, error) {
 	var buf []byte
+
+	query, args, err := s.engine.Execute(queryPath, params)
+	if err != nil {
+		return nil, err
+	}
+
 	if err := s.db.QueryRow(query, args...).Scan(&buf); err != nil {
 		return nil, err
 	}

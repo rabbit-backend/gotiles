@@ -16,14 +16,14 @@ func init() {
 
 func main() {
 	config := core.GetConfig()
-	connections := config.GetConnections()
 	sqlEngine := engine.NewEngineWithPlaceHolder(engine.NewPostgresPlaceHolder())
+	connections := config.GetConnections(sqlEngine)
 
 	e := echo.New()
 	e.Use(middleware.CORS())
 
 	e.Static("/static", path.Join("tiles", "static"))
-	e.GET("/tiles/:source/:tile/:x/:y/:z", core.NewTileController(connections, sqlEngine))
+	e.GET("/tiles/:source/:tile/:x/:y/:z", core.NewTileController(connections))
 
 	e.Use(middleware.Gzip())
 

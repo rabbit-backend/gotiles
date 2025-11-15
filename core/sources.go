@@ -7,6 +7,7 @@ import (
 
 	_ "github.com/lib/pq"
 	"github.com/rabbit-backend/go-tiles/db"
+	engine "github.com/rabbit-backend/template"
 )
 
 type DBConnection struct {
@@ -46,7 +47,7 @@ func GetConfig() GoTilesConfig {
 	return config
 }
 
-func (config GoTilesConfig) GetConnections() map[string]db.DBSource {
+func (config GoTilesConfig) GetConnections(e *engine.Engine) map[string]db.DBSource {
 	connections := make(map[string]db.DBSource, 0)
 
 	for _, source := range config.Sources {
@@ -55,7 +56,7 @@ func (config GoTilesConfig) GetConnections() map[string]db.DBSource {
 			log.Fatalln("[x] Invalid datasource:", source.Type, " / Try implementing the driver for this type")
 		}
 
-		conn := driver()
+		conn := driver(e)
 		conn.Open(source.Connection.GetConnectionURL()) // try to connect to the database
 
 		connections[source.Name] = conn
