@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"path"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 	"github.com/rabbit-backend/go-tiles/db"
@@ -12,9 +13,14 @@ import (
 
 func NewTileController(connections map[string]db.DBSource) func(c echo.Context) error {
 	return func(c echo.Context) error {
-		x := c.Param("x")
-		y := c.Param("y")
-		z := c.Param("z")
+		_x := c.Param("x")
+		_y := c.Param("y")
+		_z := c.Param("z")
+
+		x, _ := strconv.Atoi(_x)
+		y, _ := strconv.Atoi(_y)
+		z, _ := strconv.Atoi(_z)
+
 		tileName := c.Param("tile")
 		source := c.Param("source")
 
@@ -33,6 +39,7 @@ func NewTileController(connections map[string]db.DBSource) func(c echo.Context) 
 
 		tileQueryPath := path.Join("tiles", "db", source, fmt.Sprintf("%s.sql", tileName))
 		data, err := db.Execute(c, tileQueryPath, params)
+
 		if err != nil {
 			log.Println("[x] error:", err)
 			return c.Blob(http.StatusInternalServerError, "application/x-protobuf", []byte(""))

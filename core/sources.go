@@ -44,6 +44,8 @@ func GetConfig() GoTilesConfig {
 		log.Fatalln(err)
 	}
 
+	log.Println(config)
+
 	return config
 }
 

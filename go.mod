@@ -17,7 +17,7 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/paulmach/orb v0.12.0 // indirect
 	github.com/paulmach/protoscan v0.2.1 // indirect
-	github.com/rabbit-backend/template v0.0.0-20251108140306-5fe12d3f091d // indirect
+	github.com/rabbit-backend/template v0.0.0-20251115225814-68ceb650e5a6 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	go.mongodb.org/mongo-driver v1.11.4 // indirect

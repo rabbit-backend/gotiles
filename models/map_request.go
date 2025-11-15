@@ -17,28 +17,10 @@ func MapRequetDecode(params any) (*MapRequest, error) {
 		return nil, errors.New("failed to parse request")
 	}
 
-	var X, Y, Z uint32
-	if X, ok = args["_x"].(uint32); !ok {
-		return nil, errors.New("failed to parse request")
-	}
-
-	if Y, ok = args["_y"].(uint32); !ok {
-		return nil, errors.New("failed to parse request")
-	}
-
-	if Z, ok = args["_z"].(uint32); !ok {
-		return nil, errors.New("failed to parse request")
-	}
-
-	var TileName string
-	if TileName, ok = args["layer"].(string); !ok {
-		return nil, errors.New("failed to parse request")
-	}
-
 	return &MapRequest{
-		X,
-		Y,
-		Z,
-		TileName,
+		X:         uint32((args["_x"].(int))),
+		Y:         uint32(args["_y"].(int)),
+		Z:         uint32((args["_z"].(int))),
+		LayerName: args["_layer"].(string),
 	}, nil
 }
