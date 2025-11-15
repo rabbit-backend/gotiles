@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"log"
 
+	"github.com/labstack/echo/v4"
 	_ "github.com/lib/pq"
 	engine "github.com/rabbit-backend/template"
 )
@@ -22,7 +23,7 @@ func (s *PGSource) Open(conn string) {
 	s.db = db
 }
 
-func (s *PGSource) Execute(queryPath string, params any) ([]byte, error) {
+func (s *PGSource) Execute(_ echo.Context, queryPath string, params any) ([]byte, error) {
 	var buf []byte
 
 	query, args, err := s.engine.Execute(queryPath, params)

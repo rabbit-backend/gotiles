@@ -21,9 +21,10 @@ func NewTileController(connections map[string]db.DBSource) func(c echo.Context) 
 		db := connections[source]
 
 		params := map[string]any{
-			"_x": x,
-			"_y": y,
-			"_z": z,
+			"_x":     x,
+			"_y":     y,
+			"_z":     z,
+			"_layer": tileName,
 		}
 
 		for key, value := range c.QueryParams() {
@@ -31,7 +32,7 @@ func NewTileController(connections map[string]db.DBSource) func(c echo.Context) 
 		}
 
 		tileQueryPath := path.Join("tiles", "db", source, fmt.Sprintf("%s.sql", tileName))
-		data, err := db.Execute(tileQueryPath, params)
+		data, err := db.Execute(c, tileQueryPath, params)
 		if err != nil {
 			log.Println("[x] error:", err)
 			return c.Blob(http.StatusInternalServerError, "application/x-protobuf", []byte(""))

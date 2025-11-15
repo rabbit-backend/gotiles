@@ -11,12 +11,16 @@ require (
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/go-sql-driver/mysql v1.9.3 // indirect
+	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/labstack/gommon v0.4.2 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
+	github.com/paulmach/orb v0.12.0 // indirect
+	github.com/paulmach/protoscan v0.2.1 // indirect
 	github.com/rabbit-backend/template v0.0.0-20251108140306-5fe12d3f091d // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
+	go.mongodb.org/mongo-driver v1.11.4 // indirect
 	golang.org/x/crypto v0.38.0 // indirect
 	golang.org/x/net v0.40.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
