@@ -6,7 +6,8 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/rabbit-backend/go-tiles/core"
+	"github.com/rabbit-backend/go-tiles/config"
+	"github.com/rabbit-backend/go-tiles/controllers"
 	engine "github.com/rabbit-backend/template"
 )
 
@@ -15,7 +16,7 @@ func init() {
 }
 
 func main() {
-	config := core.GetConfig()
+	config := config.GetConfig()
 	sqlEngine := engine.NewEngineWithPlaceHolder(engine.NewPostgresPlaceHolder())
 	connections := config.GetConnections(sqlEngine)
 
@@ -23,7 +24,7 @@ func main() {
 	e.Use(middleware.CORS())
 
 	e.Static("/static", path.Join("tiles", "static"))
-	e.GET("/tiles/:source/:tile/:x/:y/:z", core.NewTileController(connections))
+	e.GET("/tiles/:source/:tile/:x/:y/:z", controllers.NewTileController(connections))
 
 	e.Use(middleware.Gzip())
 

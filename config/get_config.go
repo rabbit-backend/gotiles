@@ -1,29 +1,13 @@
-package core
+package config
 
 import (
 	"encoding/json"
 	"log"
 	"os"
 
-	_ "github.com/lib/pq"
 	"github.com/rabbit-backend/go-tiles/db"
 	engine "github.com/rabbit-backend/template"
 )
-
-type DBConnection struct {
-	Type  string `json:"type"`
-	Value string `json:"value"`
-}
-
-type Source struct {
-	Name       string       `json:"name"`
-	Connection DBConnection `json:"connection"`
-	Type       string       `json:"type"`
-}
-
-type GoTilesConfig struct {
-	Sources []Source `json:"sources"`
-}
 
 func (conn DBConnection) GetConnectionURL() string {
 	if conn.Type == "env" {
