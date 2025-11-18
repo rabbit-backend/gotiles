@@ -24,5 +24,9 @@
         "value": "ORACLE_URL"
       }
     }
-  ]
+  ],
+  "cache": {
+    "type": "in_memory",
+    "connection": "nil"
+  }
 }

@@ -10,6 +10,8 @@ require (
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
+	github.com/cespare/xxhash/v2 v2.3.0 // indirect
+	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/go-sql-driver/mysql v1.9.3 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/labstack/gommon v0.4.2 // indirect
@@ -18,6 +20,7 @@ require (
 	github.com/paulmach/orb v0.12.0 // indirect
 	github.com/paulmach/protoscan v0.2.1 // indirect
 	github.com/rabbit-backend/template v0.0.0-20251115225814-68ceb650e5a6 // indirect
+	github.com/redis/go-redis/v9 v9.16.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	go.mongodb.org/mongo-driver v1.11.4 // indirect

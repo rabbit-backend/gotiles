@@ -11,6 +11,12 @@ type Source struct {
 	Type       string       `json:"type"`
 }
 
+type CacheConfig struct {
+	Type       string `json:"type"`
+	Connection string `json:"connection"`
+}
+
 type GoTilesConfig struct {
-	Sources []Source `json:"sources"`
+	Sources []Source    `json:"sources"`
+	Cache   CacheConfig `json:"cache"`
 }
